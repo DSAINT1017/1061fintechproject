@@ -5,13 +5,14 @@ import "MyToken.sol";
 contract Project{
     
     address owner;
+    address official;
     string name;
     
     Token t;
     Token pt;
     
     event Expense(address from, address to, string title);
-    event Distribute(address from, uint256 amount);
+    event Contribute(address from, uint256 amount);
     
     modifier isOwner(){
         if(owner == msg.sender)
@@ -23,22 +24,23 @@ contract Project{
         pt = new Token(amount, _name, 0, "project");
         name = _name;
         owner = msg.sender;
+        official = t.getOwner();
     }
     
-    function distribute(address addr, uint256 amount) isOwner public{
+    function contribute(address addr, uint256 amount) isOwner public{
         pt.transfer(addr, amount);
-        Distribute(addr, amount);
+        Contribute(addr, amount);
     }
     function expense(uint256 amount, string _title) isOwner public{
-        pt.transfer(0x00a329c0648769A73afAc7F9381E08FB43dBEA72, amount); //平台帳號
-        Expense(msg.sender,0x00a329c0648769A73afAc7F9381E08FB43dBEA72 , _title); //平台帳號
+        t.transfer(official, amount);
+        Expense(msg.sender, official, _title);
     }
     
-    function getToken() public constant returns(Token p){
+    function getToken() public constant returns(Token){
         return pt;
     }
     
-    function getName() public constant returns(string name){
+    function getName() public constant returns(string){
         return name;
     }
 }

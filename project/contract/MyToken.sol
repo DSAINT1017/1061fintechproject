@@ -60,10 +60,6 @@ contract Token {
         return success;
     }
     
-    function getTotalSupply() public constant returns (uint256 supply) {
-        return totalSupply;
-    }
-    
     function balanceOf(address _owner) public constant returns (uint256 balance) {
         return balances[_owner];
     }
@@ -76,6 +72,14 @@ contract Token {
 
     function allowance(address _owner, address _spender) public constant returns (uint256 remaining) {
       return allowed[_owner][_spender];
+    }
+    
+    function getTotalSupply() public constant returns (uint256) {
+        return totalSupply;
+    }
+    
+    function getOwner() public constant returns (address) {
+      return owner;
     }
     
 }
