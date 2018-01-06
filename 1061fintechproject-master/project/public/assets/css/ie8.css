@@ -138,6 +138,15 @@
 			border: solid 2px #fff;
 		}
 
+	#banner_information{
+		background-attachment: scroll;
+		background-image: url("../../images/project31.JPG");
+		background-position: auto;
+		background-repeat: no-repeat;
+		background-size: cover;
+		-ms-behavior: url("assets/js/ie/backgroundsize.min.htc");
+	}
+
 /* Main */
 
 	#main {
