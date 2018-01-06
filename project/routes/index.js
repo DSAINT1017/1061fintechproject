@@ -27,27 +27,68 @@ connection.query('INSERT INTO user SET ?',{
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index.html');
+  console.log(req.session.name)
+  res.render('index',{pass : true, name : req.session.name});
 });
 
-router.route('/user')
-//取得帳戶資料
-.get(function(req, res){
-  connection.query('SELECT * FROM user where id = ?',[req.query.id], function (error, results, fields) {
-    if (error) return 'error';
-    return results;
+router.get('/login', function(req, res, next) {
+  if(req.session.name){
+    res.redirect('/');
+  }
+  res.render('login',{name : req.session.name , data: ""});
+});
+
+router.get('/signup', function(req, res, next) {
+  if(req.session.name){
+    res.redirect('/');
+  }
+  res.render('signup',{name : req.session.name});
+});
+
+router.get('/signout', function(req, res, next) {
+  req.session.destroy();
+  res.redirect('/')
+});
+
+router.get('/fund_donating', function(req, res, next) {
+  res.render('fund_donating',{name : req.session.name});
+});
+
+router.get('/fund_raising', function(req, res, next) {
+  res.render('fund_raising',{name : req.session.name});
+});
+
+router.post('/login', function(req, res ,next){
+  console.log(req.body);
+  connection.query('SELECT * FROM user where id = ?',[req.body.uid], function (error, results, fields) {
+    if(!results[0]){
+      res.render('login',{data : "查無此帳號"})
+    }
+    else{
+      console.log(results);
+      if(results[0].password == req.body.psw){
+        req.session.name = results[0].name;
+        console.log(req.session.name)
+        res.redirect('/')
+      }
+      else{
+        res.render('login',{data : "密碼錯誤"})
+      }
+    }
   });
 })
 //新增帳戶資料
-.post(function(req, res){
+router.post('/signup',function(req, res, next){
+  console.log(req.body)
   connection.query('INSERT INTO user SET ?',{
-    id : req.body.id,
-    password : req.body.password,
+    id : req.body.uid,
+    password : req.body.psw,
     name : req.body.name,
-    account: req.body.account
+    account : req.body.Ethereum
   }, function (error, results, fields) {
-    if (error) return 'error';
-    return results;
+    req.session.name = req.body.name;
+    if (error) res.redirect('signup');
+    res.redirect('/')
   });
 })
 

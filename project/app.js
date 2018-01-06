@@ -21,12 +21,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets',express.static(path.join(__dirname, 'public/assets')));
+app.use('/images',express.static(path.join(__dirname, 'public/images')));
 
 app.use(cookieParser("M4qyKu4eYm"));
 app.use(session({
   secret: 'B54C9B842DD16',
-  cookie: { maxAge: 60 * 1000 }
+  cookie: { maxAge: 10 * 60 * 1000 }
 }));
 
 app.use('/', index);
