@@ -50,6 +50,20 @@ router.get('/fund_donating', function(req, res, next) {
 router.get('/fund_raising', function(req, res, next) {
   res.render('fund_raising',{name : req.session.name});
 });
+//計畫頁面
+router.get('/project_information1', function(req, res, next) {
+  res.render('project_information1',{name : req.session.name});
+});
+router.get('/project_information2', function(req, res, next) {
+  res.render('project_information2',{name : req.session.name});
+});
+router.get('/project_information3', function(req, res, next) {
+  res.render('project_information3',{name : req.session.name});
+});
+//追蹤頁面
+router.get('/tracking', function(req, res, next) {
+  res.render('tracking',{name : req.session.name});
+});
 //登入
 router.post('/login', function(req, res ,next){
   console.log(req.body);

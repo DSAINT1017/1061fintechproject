@@ -14,7 +14,7 @@ function watchEventsContribute(address){
     
 }
 
-function watchEventsContribute(address){
+function watchEventsExpense(address){
 
     let project = new web3.eth.Expense(contract.project.abi, address);
 
