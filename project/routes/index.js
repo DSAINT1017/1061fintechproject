@@ -13,9 +13,38 @@ var connection = mysql.createConnection({
 });
 var owner;
 var project_owner;
-web3.eth.getAccounts().then(function(result){
+//假資料
+web3.eth.getAccounts().then(function (result) {
   owner = result[0];
   project_owner = result[1];
+  other1 = result[2];
+  other2 = result[3];
+  other3 = result[4];
+}).then(function () {
+  token.issueToken(owner).then(function () {
+    token.createProject(project_owner, '巡診車募資計劃', 1000000).then(function () {
+      token.contribute(other1, 50000);
+      token.contribute(other2, 100000);
+      token.contribute(other1, 10000);
+      token.contribute(other3, 10000);
+      token.contribute(other2, 200000);
+      token.contribute(other1, 10000);
+      token.contribute(other3, 50000);
+      token.contribute(other2, 100000);
+      token.contribute(other1, 10000);
+      token.contribute(other1, 50000);
+      token.contribute(other3, 100000);
+      token.contribute(other2, 10000);
+      token.contribute(other1, 100000);
+      token.contribute(other2, 50000);
+      token.contribute(other3, 100000);
+      token.contribute(other1, 50000);
+    }).then(function () {
+      token.expense(100000, '支出1');
+      token.expense(100000, '支出2');
+      token.expense(100000, '支出3');
+    })
+  });
 })
 
 /* GET home page. */
@@ -64,6 +93,14 @@ router.get('/project_information3', function(req, res, next) {
 router.get('/tracking', function(req, res, next) {
   res.render('tracking',{name : req.session.name});
 });
+//追蹤頁面
+router.get('/watch', function(req, res, next) {
+  res.render('watch',{name : req.session.name});
+});
+//追蹤頁面(admin)
+router.get('/watch-admin', function(req, res, next) {
+  res.render('watch-admin',{name : req.session.name});
+});
 //登入
 router.post('/login', function(req, res ,next){
   console.log(req.body);
@@ -98,9 +135,58 @@ router.post('/signup',function(req, res, next){
     res.redirect('/')
   });
 })
-router.post('/create',function(req,res,next){
-  token.issueToken(owner);
-  token.createProject(project_owner, 測試計畫, 100000);
+/*router.post('/create',function(req,res,next){
+  token.issueToken(owner).then(function(){
+    token.createProject(project_owner, '測試計畫', 100000);
+  });
+  res.send('success');
+})*/
+/*router.post('/donate',async function(req,res,next){
+  await token.contribute(other,5000);
+  res.send('success');
+})*/
+/*router.post('/expense',async function(req,res,next){
+  await token.expense(1000,'支出');
+  res.send('success');
+})*/
+router.post('/update',async function(req,res,next){
+  var t = []
+  var c = [];
+  var e = [];
+  await token.watchEventsContribute().then(function(events){
+    var cc = [];
+    events.forEach(element=>{
+      cc.push(element.transactionHash);//hash
+      cc.push(element.returnValues['0']);//name
+      cc.push(element.returnValues['1']);//from
+      cc.push(element.returnValues['2']);//amount
+      c.push(cc);
+      cc = [];
+    });
+  });
+  await token.watchEventsExpense().then(function(events){
+    var ee = [];
+    events.forEach(element=>{
+      ee.push(element.transactionHash);//hash
+      ee.push(element.returnValues['0']);//name
+      ee.push(element.returnValues['1']);//from
+      ee.push(element.returnValues['3']);//title
+      ee.push(element.returnValues['4']);//amount
+      ee.push(element.returnValues['2']);//to
+      e.push(ee);
+      ee = [];
+    });
+  });
+  t.push(c);
+  t.push(e);
+  res.send(t);
+})
+//查看交易receipt
+router.get('/watch/:hash',async function(req,res,next){
+  web3.eth.getTransactionReceipt(req.params.hash).then(function(receipt){
+    res.json(receipt);
+    //res.render('detail',{detail : receipt})
+  })
 })
 
 

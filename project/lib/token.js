@@ -4,21 +4,23 @@ const contract = require('./contract.js')
 let owner;
 let token_address;
 let project_owner;
+let project_address;
 
 //發行平台代幣 (發行者ethereum帳號)
 function issueToken(address){
     let token = new web3.eth.Contract(contract.token.abi);
     owner = address;
-    token.deploy({
+    return token.deploy({
         data: contract.token.bytecode,
         arguments: [0, 'MyToken', 0, 'Token']
     })
     .send({
         from: owner,
-        gas: 210000
+        gas: '0x47e7c4',
+        gasPrice: '0x1'
     })
     .then(function(newContractInstance){
-        token_address = newContractInstance.option.address;
+        token_address = newContractInstance.options.address;
     })
 
 }
@@ -28,79 +30,86 @@ function issueToken(address){
 function createProject(address, name, amount){
 
     let project = new web3.eth.Contract(contract.project.abi);
-    let address;
-    project.deploy({
+    project_owner = address;
+    return project.deploy({
         data: contract.project.bytecode,
-        arguments: [amount, name, 0, 'Project']
+        arguments: [name, amount, token_address]
     })
     .send({
-        from: address,
-        gas: 210000
+        from: project_owner,
+        gas: '0x47e7c4',
+        gasPrice: '0x1'
     })
     .then(function(newContractInstance){
-        address = newContractInstance.option.address;
+        //console.log(newContractInstance)
+        project_address = newContractInstance.options.address;
     })
-    return address;
 
 }
 
-//捐款 (計畫ethereum帳號, 捐款者ethereum帳號, 捐款數量)
-function contribute(p_address, u_address, amount){
+//捐款 (捐款者ethereum帳號, 捐款數量)
+function contribute(u_address, amount){
 
     let token = new web3.eth.Contract(contract.token.abi, token_address);
-    let project = new web3.eth.Contract(contract.project.abi, p_address);
-    let p_owner;
-    
-    project.methods.getToken().call().then(function(address){
-        getProjectOwner(address).then(function(addr){
-            p_owner = addr;
-        })
-    })
+    let project = new web3.eth.Contract(contract.project.abi, project_address);
+
     web3.eth.sendTransaction({
         from: owner,
-        to: p_owner,
+        to: project_owner,
         value: '1000000000000000000'
     })
-    token.methods.allocate(address, amount).send({
+    token.methods.allocate(u_address, amount).send({
         from: owner,
-        gas: 210000
+        gas: '0x47e7c4',
+        gasPrice: '0x1'
     })
-    token.methods.transfer(p_owner, amount).send({
+    token.methods.transfer(project_owner, amount).send({
         from: owner,
-        gas: 210000
+        gas: '0x47e7c4',
+        gasPrice: '0x1'
     })
-    project.methods.transfer(u_address, amount).send({
-        from: p_owner,
-        gas: 210000
+    project.methods.contribute(u_address, amount).send({
+        from: project_owner,
+        gas: '0x47e7c4',
+        gasPrice: '0x1'
     })
 }
 
-//計畫支出 (計畫ethereum帳號, 支出金額, 項目名稱)
-function expense(address, amount, title){
+//計畫支出 (支出金額, 項目名稱)
+function expense(amount, title){
 
-    let project = new web3.eth.Contract(contract.project.abi, address);
-    let p_owner;
-    project.methods.getToken().call().then(function(address){
-        getProjectOwner(address).then(function(addr){
-            p_owner = addr;
-        })
-    })
+    let project = new web3.eth.Contract(contract.project.abi, project_address);
+
     project.methods.expense(amount, title).send({
-        from: p_owner,
-        gas: 210000 
+        from: project_owner,
+        gas: '0x47e7c4',
+        gasPrice: '0x1'
     })
     
 }
+function watchEventsContribute(address){
 
-//取得Project募資者 (Project Token ethereum帳號)
-function getProjectOwner(address){
-    let p_token = new web3.eth.Contract(contract.token.abi, address);
-    return p_token.methods.getOwner.call();
+    let project = new web3.eth.Contract(contract.project.abi, project_address);
+    return project.getPastEvents('Contribute', {
+        fromBlock: 0,
+        toBlock: 'latest'
+    })
+}
+
+function watchEventsExpense(address){
+
+    let project = new web3.eth.Contract(contract.project.abi, project_address);
+    return project.getPastEvents('Expense', {
+        fromBlock: 0,
+        toBlock: 'latest'
+    })
 }
 
 module.exports = {
     issueToken : issueToken,
     contribute : contribute,
     createProject : createProject,
-    expense : expense
+    expense : expense,
+    watchEventsContribute : watchEventsContribute,
+    watchEventsExpense, watchEventsExpense
 }

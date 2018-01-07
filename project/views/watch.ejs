@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>追蹤</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-color:#f5f5f5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                    <h1>已完成募款專案 編號001</h1>
+                    <h2>巡診車募資計劃</h2>
+                    <h3>偏遠部落醫療《讓距離不再是距離》 讓愛走更遠</h3>
+            </div>
+            <div class="col-md-2">
+                <br>
+                <a class="btn btn-success" href="/">回首頁</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-10">
+                <ul class="nav nav-pills">
+                    <li class="active">
+                        <a data-toggle="pill" href="#donation">捐款</a>
+                    </li>
+                    <li>
+                        <a data-toggle="pill" href="#expenses">支出</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success" id="update">更新</button>
+            </div>
+        </div>
+        <br>
+        <div class="tab-content">
+            <div id="donation" class="row tab-pane fade in active">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tx Hash</th>
+                            <th>計畫名稱</th>
+                            <th>捐款人Ethereum帳戶</th>
+                            <th>捐款金額</th>
+                        </tr>
+                    </thead>
+                    <tbody id="t-donation">
+                    </tbody>
+                </table>
+            </div>
+            <div id="expenses" class="row tab-pane fade">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tx Hash</th>
+                            <th>計畫名稱</th>
+                            <th>計畫合約地址</th>
+                            <th>支出項目</th>
+                            <th>支出金額</th>
+                            <th>To:</th>
+                        </tr>
+                    </thead>
+                    <tbody id="t-expense">
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <script src="assets/js/watch.js"></script>
+
+</body>
+
+</html>
