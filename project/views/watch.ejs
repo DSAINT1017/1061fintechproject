@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        td {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 
 <body style="background-color:#f5f5f5">
@@ -45,10 +53,10 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tx Hash</th>
-                            <th>計畫名稱</th>
-                            <th>捐款人Ethereum帳戶</th>
-                            <th>捐款金額</th>
+                            <th width="45%">Tx Hash</th>
+                            <th width="10%">計畫名稱</th>
+                            <th width="30%">捐款人Ethereum帳戶</th>
+                            <th width="15%">捐款金額</th>
                         </tr>
                     </thead>
                     <tbody id="t-donation">
@@ -59,12 +67,12 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tx Hash</th>
-                            <th>計畫名稱</th>
-                            <th>計畫合約地址</th>
-                            <th>支出項目</th>
-                            <th>支出金額</th>
-                            <th>To:</th>
+                            <th width="10%">Tx Hash</th>
+                            <th width="10%">計畫名稱</th>
+                            <th width="20%">計畫合約地址</th>
+                            <th width="10%">支出項目</th>
+                            <th width="10%">支出金額</th>
+                            <th width="20%">To:</th>
                         </tr>
                     </thead>
                     <tbody id="t-expense">

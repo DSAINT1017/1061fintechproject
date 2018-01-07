@@ -22,7 +22,39 @@ web3.eth.getAccounts().then(function (result) {
   other3 = result[4];
 }).then(function () {
   token.issueToken(owner).then(function () {
-    token.createProject(project_owner, '巡診車募資計劃', 1000000).then(function () {
+    token.createProject(project_owner, '巡診車募資計劃', 3000000).then(function () {
+      token.contribute(other1, 50000);
+      token.contribute(other2, 100000);
+      token.contribute(other1, 10000);
+      token.contribute(other3, 10000);
+      token.contribute(other2, 200000);
+      token.contribute(other1, 10000);
+      token.contribute(other3, 50000);
+      token.contribute(other2, 100000);
+      token.contribute(other1, 10000);
+      token.contribute(other1, 50000);
+      token.contribute(other3, 100000);
+      token.contribute(other2, 10000);
+      token.contribute(other1, 100000);
+      token.contribute(other2, 50000);
+      token.contribute(other3, 100000);
+      token.contribute(other1, 50000);
+      token.contribute(other1, 50000);
+      token.contribute(other2, 100000);
+      token.contribute(other1, 10000);
+      token.contribute(other3, 10000);
+      token.contribute(other2, 200000);
+      token.contribute(other1, 10000);
+      token.contribute(other3, 50000);
+      token.contribute(other2, 100000);
+      token.contribute(other1, 10000);
+      token.contribute(other1, 50000);
+      token.contribute(other3, 100000);
+      token.contribute(other2, 10000);
+      token.contribute(other1, 100000);
+      token.contribute(other2, 50000);
+      token.contribute(other3, 100000);
+      token.contribute(other1, 50000);
       token.contribute(other1, 50000);
       token.contribute(other2, 100000);
       token.contribute(other1, 10000);
@@ -40,9 +72,8 @@ web3.eth.getAccounts().then(function (result) {
       token.contribute(other3, 100000);
       token.contribute(other1, 50000);
     }).then(function () {
-      token.expense(100000, '支出1');
-      token.expense(100000, '支出2');
-      token.expense(100000, '支出3');
+      token.expense(2000000, '購車');
+      token.expense(1000000, '交通輔助');
     })
   });
 })
@@ -97,10 +128,19 @@ router.get('/tracking', function(req, res, next) {
 router.get('/watch', function(req, res, next) {
   res.render('watch',{name : req.session.name});
 });
-//追蹤頁面(admin)
-router.get('/watch-admin', function(req, res, next) {
-  res.render('watch-admin',{name : req.session.name});
+//追蹤頁面
+router.get('/tracking_project01', function(req, res, next) {
+  res.render('tracking_project01',{name : req.session.name});
 });
+//追蹤頁面
+router.get('/tracking_project02', function(req, res, next) {
+  res.render('tracking_project02',{name : req.session.name});
+});
+//追蹤頁面
+router.get('/tracking_project03', function(req, res, next) {
+  res.render('tracking_project03',{name : req.session.name});
+});
+
 //登入
 router.post('/login', function(req, res ,next){
   console.log(req.body);
