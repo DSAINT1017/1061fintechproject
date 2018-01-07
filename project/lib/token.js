@@ -3,10 +3,10 @@ const contract = require('./contract.js')
 
 let owner;
 let token_address;
+let project_owner;
 
-//發行平台代幣 (發行者ethereum帳號, 代幣名稱)
-function issueToken(address, name){
-
+//發行平台代幣 (發行者ethereum帳號)
+function issueToken(address){
     let token = new web3.eth.Contract(contract.token.abi);
     owner = address;
     token.deploy({

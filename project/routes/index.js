@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var mysql = require('mysql');
-var credentials = require('../lib/credentials.js');
+const express = require('express');
+const router = express.Router();
+const mysql = require('mysql');
+const credentials = require('../lib/credentials.js');
+const token = require('../lib/token.js');
+const web3 = require('../lib/web3.js')
 
 var connection = mysql.createConnection({
   host     : credentials.sql.host,
@@ -9,55 +11,46 @@ var connection = mysql.createConnection({
   password : credentials.sql.password,
   database : credentials.sql.database
 });
-/* SQL Example */
-/*connection.query('SELECT * FROM user where id = ?',['autumn'], function (error, results, fields) {
-  if (error) throw error;
-  console.log(results);
-});
-connection.query('INSERT INTO user SET ?',{
-  id : 'test',
-  password : 'test123',
-  name : '測試',
-  account: '024920f65e4cfd4819564ed3529738216ec0b7ee'
-}, function (error, results, fields) {
-  if (error) throw error;
-  console.log(results);
-});*/
-
+var owner;
+var project_owner;
+web3.eth.getAccounts().then(function(result){
+  owner = result[0];
+  project_owner = result[1];
+})
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log(req.session.name)
   res.render('index',{pass : true, name : req.session.name});
 });
-
+//登入頁面
 router.get('/login', function(req, res, next) {
   if(req.session.name){
     res.redirect('/');
   }
   res.render('login',{name : req.session.name , data: ""});
 });
-
+//註冊頁面
 router.get('/signup', function(req, res, next) {
   if(req.session.name){
     res.redirect('/');
   }
   res.render('signup',{name : req.session.name});
 });
-
+//登出
 router.get('/signout', function(req, res, next) {
   req.session.destroy();
   res.redirect('/')
 });
-
+//捐款頁面
 router.get('/fund_donating', function(req, res, next) {
   res.render('fund_donating',{name : req.session.name});
 });
-
+//發起計畫頁面
 router.get('/fund_raising', function(req, res, next) {
   res.render('fund_raising',{name : req.session.name});
 });
-
+//登入
 router.post('/login', function(req, res ,next){
   console.log(req.body);
   connection.query('SELECT * FROM user where id = ?',[req.body.uid], function (error, results, fields) {
@@ -77,7 +70,7 @@ router.post('/login', function(req, res ,next){
     }
   });
 })
-//新增帳戶資料
+//註冊
 router.post('/signup',function(req, res, next){
   console.log(req.body)
   connection.query('INSERT INTO user SET ?',{
@@ -90,6 +83,10 @@ router.post('/signup',function(req, res, next){
     if (error) res.redirect('signup');
     res.redirect('/')
   });
+})
+router.post('/create',function(req,res,next){
+  token.issueToken(owner);
+  token.createProject(project_owner, 測試計畫, 100000);
 })
 
 
