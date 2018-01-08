@@ -140,6 +140,10 @@ router.get('/tracking_project02', function(req, res, next) {
 router.get('/tracking_project03', function(req, res, next) {
   res.render('tracking_project03',{name : req.session.name});
 });
+//階段性放款
+router.get('/step', function(req, res, next) {
+  res.render('step',{name : req.session.name});
+});
 
 //登入
 router.post('/login', function(req, res ,next){
